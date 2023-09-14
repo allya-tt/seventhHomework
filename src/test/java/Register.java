@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Register {
     @Test
-    public void RegisterPositiveCase() {
+    public void registerPositiveCase() {
         Response response = RestAssured
                 .given()
                 .contentType("application/json")
@@ -25,8 +25,9 @@ public class Register {
                 .andReturn();
         response.prettyPrint();
     }
+
     @Test
-    public void RegisterPositiveCaseWithParamInMap() throws IllegalStateException{
+    public void registerPositiveCaseWithParamInMap() throws IllegalStateException {
         Map<String, String> body = new HashMap<>();
         body.put("email", "eve.holt@reqres.in");
         body.put("password", "pistol");
@@ -36,12 +37,14 @@ public class Register {
                 .body(body)
                 .when()
                 .post("https://reqres.in/api/register")
+                .andReturn()
                 .then()
                 .statusCode(200);
+        System.out.println(response.extract().asPrettyString());
     }
 
     @Test
-    public void NoPasswordCase() throws IllegalStateException{
+    public void noPasswordCase() throws IllegalStateException {
         Map<String, String> body = new HashMap<>();
         body.put("email", "eve.holt@reqres.in");
         ValidatableResponse response = (ValidatableResponse) RestAssured
@@ -52,10 +55,11 @@ public class Register {
                 .post("https://reqres.in/api/register")
                 .then()
                 .statusCode(400);
+        System.out.println(response.extract().asPrettyString());
     }
 
     @Test
-    public void EmptyPasswordCase() throws IllegalStateException{
+    public void emptyPasswordCase() throws IllegalStateException {
         Map<String, String> body = new HashMap<>();
         body.put("email", "eve.holt@reqres.in");
         body.put("password", "");
@@ -67,9 +71,11 @@ public class Register {
                 .post("https://reqres.in/api/register")
                 .then()
                 .statusCode(400);
+        System.out.println(response.extract().asPrettyString());
     }
+
     @Test
-    public void NoPasswordCaseWithResponse() throws IllegalStateException{
+    public void noPasswordCaseWithResponse() throws IllegalStateException {
         Map<String, String> body = new HashMap<>();
         body.put("email", "eve.holt@reqres.in");
         Response response = RestAssured
@@ -84,6 +90,7 @@ public class Register {
         System.out.println("Status code: " + statusCode);
         assertEquals(400, response.statusCode(), "Missing password");
     }
+
     @Test
     public void testJsonKeys() {
         Response response = RestAssured
@@ -97,12 +104,13 @@ public class Register {
                 .andReturn();
         response.prettyPrint();
         String[] expectedKeys = {"error"};
-        for (String expectedKey: expectedKeys) {
+        for (String expectedKey : expectedKeys) {
             response.then().assertThat().body("$", hasKey(expectedKey));
         }
     }
+
     @Test
-    public void ValidDataWrongApiResult(){
+    public void validDataWrongApiResult() {
         JsonPath response = RestAssured
                 .given()
                 .contentType(ContentType.JSON)
